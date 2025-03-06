@@ -1,0 +1,109 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("https://simpocitybucket.s3.sa-east-1.amazonaws.com/archive/otros/EmpresaId_527_730202123640.tmp") !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+    background-size:cover !important;
+    padding: 10px;
+    color: #494a4a;
+    font-family: Arial, sans-serif;
+    height: 420px;
+    width: 430px;
+}
+
+.imgSpot {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    background-color: #e9e9e9;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: #e9e9e9 0px 0px 15px 5px;
+}
+
+#login-container {
+    background-color: #FFF;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: black 0px 0px 5px;
+    width: 400px;
+    height: 390px;
+    text-align: center;
+    position: relative;
+}
+
+.titulo-form{
+    margin-bottom: 1rem;
+    font-size: 14px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+
+#login-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-login{
+    padding: 0.75rem;
+    border: 2px lightgrey solid;
+    border-radius: 5px;
+    background-color: #FFF;
+    color: #094867;
+    font-size: 14px;
+    text-align: center;
+}
+
+.input-login:focus{
+    border: 1px black solid !important;
+    outline: none;
+}
+
+.forgot-pass {
+    text-decoration: none;
+    color: #494a4a;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: all .2s;
+}
+
+.forgot-pass:hover{
+    transform: scale(1.05);
+}
+
+#login-form button{
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, #2e7da5, #094868);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#login-form button:hover {
+    background: linear-gradient(to top, #2e7da5, #094868);
+}
+
+#login-form button.success {
+    transform: scale(1.05);
+    transition: background-color 0.5s ease, transform 0.3s ease;
+}
+
+#login-form {
+    margin-bottom: 1rem;
+}
+
+#error-message {
+    font-size: 14px;
+}
