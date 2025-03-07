@@ -25,18 +25,26 @@ export function useUser() {
     loading: false,
     error: false
     });
-    
+
   const login = useCallback(({User, Password}:LoginParams) => {
     setState({loading: true, error: false});
     loginService({User, Password})
         .then(jwt => {
-            setState({loading: false, error: false});
-            setJWT(jwt.Token);
-            setSecUserId(jwt.SecUserId);
+            chrome.storage.local.set(
+                { jwtCommodinExt: jwt.Token, secUserId: jwt.SecUserId },
+                () => {
+                  setState({ loading: false, error: false });
+                  setJWT(jwt.Token);
+                  setSecUserId(jwt.SecUserId);
+                }
+              );
         })
         .catch(err => {
             setState({loading: false, error: true});
-            console.log(err)}
+            chrome.storage.local.remove(["jwtCommodinExt", "secUserId"], () => {
+                console.log("Error:", err);
+              });
+            }
         )
   }, [setJWT, setSecUserId]);
 
