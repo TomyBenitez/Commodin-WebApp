@@ -1,17 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'wouter';
+import useUser from '../../hooks/useUser';
+
 import './Login.css';
 
 export const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [User, setUser] = useState('');
+  const [Password, setPassword] = useState('');
+  const { isLoginLoading, hasLoginError, login, isLogged } = useUser();
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (isLogged) setLocation('/')
+  },[isLogged, setLocation]);
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
-    alert(`Email: ${email} - Password: ${password}`);
+    login({ User, Password });
   }
 
   return (
     <>
+      <div id='background'>
       <div id="login-container">
         <div>
           <img src="https://simpocitybucket.s3.sa-east-1.amazonaws.com/archive/otros/idfs3_442024201028.tmp"
@@ -25,7 +35,7 @@ export const Login = () => {
               className="input-login"
               id="email"
               placeholder="Correo electrónico"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setUser(e.target.value)}
               required />
             <input 
               type="password"
@@ -34,11 +44,20 @@ export const Login = () => {
               placeholder="Contraseña"
               onChange={(e) => setPassword(e.target.value)}
               required />
-            <button type="submit" id="btnSubmitEmail">SIGUIENTE</button>
+            <button 
+              type="submit"
+              id="btnSubmitEmail"
+              style={!isLoginLoading && hasLoginError ? 
+              {transition:'0.3 ease', background:'linear-gradient(to bottom, #b3212b, #dc3545)'}:{}}>
+              {
+                isLoginLoading ? 'Iniciando Sesión...' : hasLoginError ? 'Credenciales incorrectas. Intente nuevamente.' : 'SIGUIENTE'
+              }
+            </button>
             <div className="forgot-pass-container">
               <a className="forgot-pass" target="_blank" href="https://app.simpocity.com/community_start_acc_type.aspx?527,">Si aún no tiene cuenta puede registrarse aquí</a>
             </div>
         </form>
+      </div>
       </div>
     </>
   )

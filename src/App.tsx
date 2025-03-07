@@ -1,18 +1,20 @@
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
+import { UserContextProvider } from "./context/UserContext";
+import useUser from "./hooks/useUser";
+import { Home } from "./pages/home/Home";
 
-const isLogged = false;
 export const App = () => {
   return (
-   <>
-    {
-      isLogged ? (
-        <h1>Welcome to the App</h1>
-      ) : (
-        <Login />
-      )
-    }
-   </>
-  )
-}
+    <UserContextProvider>
+      <AppContent />
+    </UserContextProvider>
+  );
+};
+
+const AppContent = () => {
+  const { isLogged } = useUser(); //importar el logout cuando esté hecho
+
+  return isLogged ? <Home /> : <Login />;
+};
 
 export default App;

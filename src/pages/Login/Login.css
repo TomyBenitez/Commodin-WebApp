@@ -1,7 +1,9 @@
-body{
+#background{
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    width: 100%;
     background: url("https://simpocitybucket.s3.sa-east-1.amazonaws.com/archive/otros/EmpresaId_527_730202123640.tmp") !important;
     background-repeat: no-repeat !important;
     background-size: 100% 100% !important;
