@@ -1,4 +1,5 @@
 import { useState, createContext, ReactNode, useEffect } from "react";
+import { getToken } from "../services/tokenChrome";
 
 // Definir la estructura del contexto
 interface UserContextType {
@@ -14,20 +15,6 @@ const Context = createContext<UserContextType | null>(null);
 interface UserContextProviderProps {
   children: ReactNode;
 }
-
-// Verificación de la existencia del token
-const getToken = (name: string): Promise<string | null> => {
-    return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-            if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError);  // Maneja errores
-            } else {
-            resolve(result[name] || null);  // Resuelve con el valor o null si no existe
-            }
-        });
-    });
-};
-
 
 export function UserContextProvider({ children }: UserContextProviderProps) {
   const [jwt, setJWT] = useState<string | null>(null);
