@@ -1,5 +1,4 @@
 import { EncryptedUrl } from "../services/encryptUrl";
-import { getCookie } from "../services/tokenChrome";
 
 function formatFecha(fechaOriginal: any) {
     if (!fechaOriginal || typeof fechaOriginal !== 'string') {
