@@ -1,5 +1,5 @@
 import { useState, createContext, ReactNode, useEffect } from "react";
-import { getToken } from "../services/tokenChrome";
+import cookieService from '../services/tokenChrome'
 
 // Definir la estructura del contexto
 interface UserContextType {
@@ -23,8 +23,8 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
   useEffect(() => {
     const fetchTokenData = async () => {
       try {
-        const storedJwt = await getToken('jwtCommodinExt');
-        const storedSecUserId = await getToken('SecUserIdCommodinExt');
+        const storedJwt = await cookieService.getCookie('jwtCommodinExt');
+        const storedSecUserId = await cookieService.getCookie('SecUserIdCommodinExt');
         
         // Setear los valores en el estado si están disponibles
         setJWT(storedJwt);

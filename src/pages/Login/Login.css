@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     background: url("https://simpocitybucket.s3.sa-east-1.amazonaws.com/archive/otros/EmpresaId_527_730202123640.tmp") !important;
     background-repeat: no-repeat !important;
@@ -11,8 +11,6 @@
     padding: 10px;
     color: #494a4a;
     font-family: Arial, sans-serif;
-    height: 420px;
-    width: 430px;
 }
 
 .imgSpot {
@@ -30,11 +28,32 @@
     padding: 2rem;
     border-radius: 10px;
     box-shadow: black 0px 0px 5px;
-    width: 400px;
-    height: 390px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
     text-align: center;
     position: relative;
+    margin: 0 auto;
 }
+
+/* Media Query para pantallas pequeñas (por ejemplo, móviles) */
+@media (max-width: 768px) {
+    #login-container {
+        padding: 1.5rem;
+        width: 90%;
+        max-width: 350px;
+    }
+}
+
+/* Media Query para pantallas muy pequeñas (por ejemplo, móviles en modo vertical) */
+@media (max-width: 480px) {
+    #login-container {
+        width: 90%;
+        max-width: 300px;
+        padding: 1rem;
+    }
+}
+
 
 .titulo-form{
     margin-bottom: 1rem;

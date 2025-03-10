@@ -2,7 +2,7 @@ import './Home.css';
 import { useCallback, useContext, useState, useEffect } from "react";
 import Context from "../../context/UserContext";
 import getLastBusiness from '../../services/getLastBusiness';
-import { getToken, removeToken } from '../../services/tokenChrome';
+import cookieService from '../../services/tokenChrome'
 import getActions from '../../services/getActions';
 import CardOnLive from '../../components/CardOnLive';
 
@@ -22,8 +22,8 @@ export const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedToken = await getToken('jwtCommodinExt')
-                const fetchedUserId = await getToken('secUserId');
+                const fetchedToken = await cookieService.getCookie('jwtCommodinExt')
+                const fetchedUserId = await cookieService.getCookie('secUserId');
                 
                 setToken(fetchedToken);
                 setUserId(fetchedUserId);
@@ -45,8 +45,10 @@ export const Home = () => {
                 });
 
                 if (lastBusiness?.EmpresaLogo) {
+                    await cookieService.setCookie('empresaId',lastBusiness.EmpresaId)
+                    await cookieService.setCookie('empresaLogo',lastBusiness.EmpresaLogo)
                     setEmpresaId(lastBusiness.EmpresaId)
-                    setLogoUrl(lastBusiness.EmpresaLogo);
+                    setLogoUrl(lastBusiness.EmpresaLogo)
                 }
             } catch (error) {
                 console.error("Error obteniendo los datos del negocio:", error);
@@ -61,9 +63,43 @@ export const Home = () => {
 
         const fetchActionsData = async () => {
             try {
-                const allActions = await getActions({
+                let allActions:any[]= await getActions({
                     EmpresaId: empresaId,
                     Token: token,
+                });
+
+                const ahora = new Date();
+                const hoy = ahora.toISOString().split('T')[0];
+
+                allActions = allActions.filter(item =>
+                    (item.ActTipoActividad === 2 || item.ActTipoActividad === 3) &&
+                    item.ActStatus === 1
+                );
+
+                allActions = allActions.filter(item => {
+                    if (item.Level1 && Array.isArray(item.Level1)) {
+                        item.Level1 = item.Level1.filter((child:any) => {
+                            if (!child.ActTabDTStart || !child.ActTabDTEnd) return false; // Si no hay fecha, descartar
+    
+                            const startDate = new Date(child.ActTabDTStart);
+                            const endDate = new Date(child.ActTabDTEnd);
+    
+                            // Verificar si las fechas son válidas
+                            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return false;
+    
+                            const startDateFormatted = startDate.toISOString().split('T')[0];
+                            const endDateFormatted = endDate.toISOString().split('T')[0];
+    
+                            return (
+                                (child.EveDeliveryFormat === 9 || child.EveDeliveryFormat === 15) &&
+                                Number(child.ActEveActive) === 1 &&
+                                hoy >= startDateFormatted && hoy <= endDateFormatted
+                            );
+                        });
+    
+                        return item.Level1.length > 0;
+                    }
+                    return false;
                 });
 
                 setActions(allActions)
@@ -84,8 +120,8 @@ export const Home = () => {
     const { setJWT, setSecUserId } = context;
         const logout = useCallback(()=>{
             //remover token y userId
-            removeToken('jwtCommodinExt')
-            removeToken('secUserId')
+            cookieService.removeCookie('jwtCommodinExt')
+            cookieService.removeCookie('secUserId')
             setJWT(null)
             setSecUserId(null)
         },[setJWT,setSecUserId])
@@ -101,20 +137,20 @@ export const Home = () => {
                                 <img 
                                     src={logoUrl}
                                     id="imageLogoEnterprice"
-                                    alt="Comodín"
+                                    alt="Commodin"
                                     onLoad={imageLoaded}
                                     className={`imgPopupMenu ${imageLoadedState ? 'loaded' : ''}`} />
                             ):(
-                                <div>...</div>
+                                <div style={{color:'white'}}>.</div>
                             )
                         }
                         <button className="closeSesionClass" onClick={logout}>Cerrar Sesión</button>
                     </div>
                     <div className="content" id="dynamicContent" style={dynamicStyle}>
                         {
-                            actions ? (
+                            actions.length>0 ? (
                                 <>
-                                    <h3 style={{width:'100%', textAlign:'center' }}>Ahora Mismo</h3>
+                                    <h3 style={{width:'100%', textAlign:'center', paddingBottom:10 }}>Ahora Mismo</h3>
                                     {
                                     actions.map((action, index)=> (
                                         <CardOnLive action={action} key={index}/>

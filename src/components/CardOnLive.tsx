@@ -1,3 +1,6 @@
+import { EncryptedUrl } from "../services/encryptUrl";
+import { getCookie } from "../services/tokenChrome";
+
 function formatFecha(fechaOriginal: any) {
     if (!fechaOriginal || typeof fechaOriginal !== 'string') {
         return 'Fecha inválida';
@@ -23,13 +26,21 @@ function formatFecha(fechaOriginal: any) {
     }).format(fecha);
 }
 
+async function handleWindow(ActId:string, ActTipoActividad:number){
+    const url = await EncryptedUrl(ActId, ActTipoActividad.toString())
+    window.location.href = `${url}`;
+}
 
 function CardOnLive({action}:{action:any}) {
     const level1 = action?.Level1?.[0];
   return (
     <>
-        <div className='data-box' data-actid={action?.ActId || 0} data-typeact={action?.ActTipoActividad}>
-            <img src={action.ActRAM} alt={action.ActRAM}/>
+        <div className='data-box'
+            onClick={() => handleWindow(action?.ActId, action?.ActTipoActividad)}
+            data-actid={action?.ActId || 0}
+            data-typeact={action?.ActTipoActividad}>
+
+            <img src={action.ActRAM} alt={action.ActPrgTitle}/>
             <div className='data-content'>
                 <p style={{color:'#e74c3c', fontWeight:'600', width:'100%', textAlign:'end'}}>
                     <span className="live-dot"></span>Evento en vivo

@@ -1,41 +1,36 @@
-export const getToken = (name: string): Promise<string | null> => {
-    return new Promise((resolve, reject) => {
-        chrome.storage.local.get([name], (result) => {
-            if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError);  // Maneja errores
-            } else {
-            return resolve(result[name] || null);  // Resuelve con el valor o null si no existe
-            }
-        });
+export const setCookie = (name: string, value: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const expires = new Date();
+        expires.setFullYear(expires.getFullYear() + 10);
+        const cookieString = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/`;
+        
+        // Solo agregar 'Secure' si estamos en un entorno HTTPS
+        if (window.location.protocol === 'https:') {
+            document.cookie = `${cookieString}; Secure`;
+        } else {
+            document.cookie = cookieString;
+        }
+        
+        resolve();
     });
 };
 
-export const setToken = (name: string, value: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        chrome.storage.local.set({ [name]: value }, () => {
-            if (chrome.runtime.lastError) {
-                reject(chrome.runtime.lastError); // Maneja errores
-            } else {
-                resolve(); // Resuelve la promesa cuando se complete
-            }
-        });
-    });
+
+export const getCookie = async (name: string): Promise<string | null> => {
+    const cookies = document.cookie.split("; ");
+    const cookie = cookies.find(row => row.startsWith(`${name}=`));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
 };
 
-export const removeToken = (name: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        chrome.storage.local.remove([name], () => {
-            if (chrome.runtime.lastError) {
-                reject(chrome.runtime.lastError); // Maneja errores
-            } else {
-                resolve(); // Resuelve la promesa cuando se complete
-            }
-        });
+export const removeCookie = (name: string): Promise<void> => {
+    return new Promise((resolve) => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        resolve();
     });
 };
 
 export default {
-    getToken,
-    setToken,
-    removeToken
+    setCookie,
+    getCookie,
+    removeCookie
 };

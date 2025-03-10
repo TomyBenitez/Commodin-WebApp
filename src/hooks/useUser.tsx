@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState } from "react";
 import Context from "../context/UserContext";
 import loginService from "../services/login";
-import { removeToken, setToken } from "../services/tokenChrome";
+import cookieService from '../services/tokenChrome'
 
 
 interface LoginParams{
@@ -27,28 +27,22 @@ export function useUser() {
     error: false
     });
 
-  const login = useCallback(({User, Password}:LoginParams) => {
+  const login = useCallback(async ({ User, Password }: LoginParams) => {
     setState({loading: true, error: false});
-    loginService({User, Password})
-        .then(jwt => {
-            //set token en storage.local
-            setToken('jwtCommodinExt',jwt.Token)
-            setToken('secUserId',jwt.SecUserId)
-            //set estado de error para login form
-            setState({ loading: false, error: false });
-            //setJWT y UserId para cambiar de page
-            setJWT(jwt.Token);
-            setSecUserId(jwt.SecUserId);
-        })
-        .catch(err => {
-            //set de error para login form
-            setState({loading: false, error: true});
-            console.log(err)
-            //quito los token
-            removeToken('jwtCommodinExt')
-            removeToken('secUserId')
-          }
-        )
+    try {
+      const jwt = await loginService({ User, Password });
+      // Set token en las cookies
+      await cookieService.setCookie('jwtCommodinExt', jwt.Token);
+      await cookieService.setCookie('secUserId', jwt.SecUserId);
+      setState({ loading: false, error: false });
+      setJWT(jwt.Token);
+      setSecUserId(jwt.SecUserId);
+  } catch (err) {
+      setState({ loading: false, error: true });
+      console.log(err);
+      cookieService.removeCookie('jwtCommodinExt');
+      cookieService.removeCookie('secUserId');
+  }
   }, [setJWT, setSecUserId]);
 
   return {
