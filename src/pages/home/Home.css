@@ -78,9 +78,6 @@ body{
 }
 
 .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background: white;
     padding: 15px;
     border-radius: 10px;

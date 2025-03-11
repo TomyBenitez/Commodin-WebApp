@@ -90,7 +90,7 @@ export const Home = () => {
                         }
                         <button className="closeSesionClass" onClick={logout}>Cerrar Sesión</button>
                     </div>
-                    <div className="content" id="dynamicContent" style={{ display: hasActions || hasReminders ? "block" : "flex" }}>
+                    <div className="content" id="dynamicContent">
                         {
                             token && empresaId && userId ? 
                             (
@@ -98,7 +98,7 @@ export const Home = () => {
                                     <ActionsCard token={token} empresaId={empresaId} onActionsUpdate={setHasActions}/>
                                     <RemindersCard token={token} empresaId={empresaId} secUserId={userId} onRemindersUpdate={setHasReminders} />
                                 </>
-                            ):('')
+                            ):null
                         }
                     </div>
                 </div>

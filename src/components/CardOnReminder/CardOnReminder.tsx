@@ -31,7 +31,7 @@ function CardOnReminder({reminder}:{reminder:any}) {
         <div className='data-box-reminder'>
             <div className='data-content-reminder'>
                 <h3>{reminder.ActPrgTitle}</h3>
-                <p><strong>Desde: </strong>{formatFecha(reminder.ActFechaCompartido)}</p>
+                <p><strong>Inicio: </strong>{formatFecha(reminder.ActFechaCompartido)}</p>
             </div>
         </div>
     </>

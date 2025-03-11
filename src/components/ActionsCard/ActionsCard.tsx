@@ -5,7 +5,7 @@ import './ActionsCard.css'
 
 
 export const ActionsCard = ({ token, empresaId, onActionsUpdate }: { token: string, empresaId: string, onActionsUpdate: (hasActions: boolean) => void }) => {
-    const [actions, setActions] = useState<any[]>([]);
+    const [actions, setActions] = useState<any[]|null>(null);
     useEffect(() => {
         if (!token || !empresaId) return; // No ejecutar si faltan valores
     
@@ -63,9 +63,9 @@ export const ActionsCard = ({ token, empresaId, onActionsUpdate }: { token: stri
   return (
     <>
         {
-            actions.length>0 ? (
+            actions !== null && actions.length>0 ? (
                 <>
-                    <h3 style={{width:'100%', textAlign:'center', paddingBottom:10 }}>Ahora mismo</h3>
+                    <h3 className="title-action">Ahora mismo</h3>
                     {
                     actions.map((action, index)=> (
                         <CardOnLive action={action} key={index}/>
@@ -73,7 +73,22 @@ export const ActionsCard = ({ token, empresaId, onActionsUpdate }: { token: stri
                     }
                 </>
             ):(
-                <div className="loader"></div>
+                actions === null ?
+                (
+                    <>
+                        <h3 className="title-action">Ahora mismo</h3>
+                        <div style={{width:'100%', display:"flex", justifyContent:"center", alignItems:"center", marginTop:5, marginBottom:5}}>
+                            <div className='loader'></div>
+                        </div>
+                    </>
+                ):(
+                    <>
+                        <h3 className='title-action'>Ahora mismo</h3>
+                        <div style={{width:'100%', height:50, display:'flex', justifyContent:'center', alignItems:'center'}}>
+                            <p><strong>No hay ahora mismos</strong></p>
+                        </div>
+                    </>
+                )
             )
         }
     </>
