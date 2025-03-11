@@ -1,4 +1,6 @@
-import { EncryptedUrl } from "../services/encryptUrl";
+import { useState } from "react";
+import { EncryptedUrl } from "../../services/encryptUrl";
+import './CardOnLive.css'
 
 function formatFecha(fechaOriginal: any) {
     if (!fechaOriginal || typeof fechaOriginal !== 'string') {
@@ -27,20 +29,28 @@ function formatFecha(fechaOriginal: any) {
 
 async function handleWindow(ActId:string, ActTipoActividad:number){
     const url = await EncryptedUrl(ActId, ActTipoActividad.toString())
-    window.location.href = `${url}`;
+    window.open(`${url}`)
 }
 
 function CardOnLive({action}:{action:any}) {
     const level1 = action?.Level1?.[0];
+    const [imageLoadedState, setImageLoadedState] = useState(false);
+
+    const imageLoaded = () => {
+        setImageLoadedState(true);
+    };
+    
   return (
     <>
-        <div className='data-box'
+        <div className='data-box-live'
             onClick={() => handleWindow(action?.ActId, action?.ActTipoActividad)}
             data-actid={action?.ActId || 0}
             data-typeact={action?.ActTipoActividad}>
-
-            <img src={action.ActRAM} alt={action.ActPrgTitle}/>
-            <div className='data-content'>
+            <img src={action.ActRAM}
+            onLoad={imageLoaded}
+            alt={action.ActPrgTitle}
+            className={`${imageLoadedState ? 'loaded' : ''}`}/>
+            <div className='data-content-live'>
                 <p style={{color:'#e74c3c', fontWeight:'600', width:'100%', textAlign:'end'}}>
                     <span className="live-dot"></span>Evento en vivo
                 </p>

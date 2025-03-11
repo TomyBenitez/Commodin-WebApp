@@ -1,0 +1,70 @@
+/* Estilos para el recuadro de datos */
+.data-box-live{
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: fadeInScale 0.2s ease-in-out forwards;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.data-box-live:hover{
+    transform: translateY(-2px);
+    background: #f8f8f8;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Imagen pequeña en la izquierda */
+.data-box-live img {
+    top: 0;
+    width: 25%;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 5px;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+}
+
+.loaded {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Contenido a la derecha */
+.data-content-live {
+    flex: 1;
+    margin-left: 3%;
+}
+
+.data-content-live h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limita a 2 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3em; /* Ajusta según el tamaño de fuente */
+    white-space: normal;
+}
+
+.data-content-live p {
+    margin: 5px 0;
+    font-size: 10px;
+    color: #555;
+}

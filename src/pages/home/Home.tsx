@@ -3,8 +3,8 @@ import { useCallback, useContext, useState, useEffect } from "react";
 import Context from "../../context/UserContext";
 import getLastBusiness from '../../services/getLastBusiness';
 import cookieService from '../../services/tokenChrome'
-import getActions from '../../services/getActions';
-import CardOnLive from '../../components/CardOnLive';
+import { ActionsCard } from '../../components/ActionsCard/ActionsCard';
+import { RemindersCard } from '../../components/RemindersCard/RemindersCard';
 
 export const Home = () => {
     const [token, setToken] = useState<string | null>(null);
@@ -12,7 +12,8 @@ export const Home = () => {
     const [empresaId, setEmpresaId] = useState<string | null>(null);
     const [logoUrl, setLogoUrl] = useState<string | null>(null);
     const [imageLoadedState, setImageLoadedState] = useState(false);
-    const [actions, setActions] = useState<any[]>([]);
+    const [hasActions, setHasActions] = useState(false);
+    const [hasReminders, setHasReminders] = useState(false);
     const context = useContext(Context);
 
     if (!context) {
@@ -58,61 +59,6 @@ export const Home = () => {
         fetchBusinessData();
     }, [token, userId]);
 
-    useEffect(() => {
-        if (!token || !empresaId) return; // No ejecutar si faltan valores
-
-        const fetchActionsData = async () => {
-            try {
-                let allActions:any[]= await getActions({
-                    EmpresaId: empresaId,
-                    Token: token,
-                });
-
-                const ahora = new Date();
-                const hoy = ahora.toISOString().split('T')[0];
-
-                allActions = allActions.filter(item =>
-                    (item.ActTipoActividad === 2 || item.ActTipoActividad === 3) &&
-                    item.ActStatus === 1
-                );
-
-                allActions = allActions.filter(item => {
-                    if (item.Level1 && Array.isArray(item.Level1)) {
-                        item.Level1 = item.Level1.filter((child:any) => {
-                            if (!child.ActTabDTStart || !child.ActTabDTEnd) return false; // Si no hay fecha, descartar
-    
-                            const startDate = new Date(child.ActTabDTStart);
-                            const endDate = new Date(child.ActTabDTEnd);
-    
-                            // Verificar si las fechas son válidas
-                            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return false;
-    
-                            const startDateFormatted = startDate.toISOString().split('T')[0];
-                            const endDateFormatted = endDate.toISOString().split('T')[0];
-    
-                            return (
-                                (child.EveDeliveryFormat === 9 || child.EveDeliveryFormat === 15) &&
-                                Number(child.ActEveActive) === 1 &&
-                                hoy >= startDateFormatted && hoy <= endDateFormatted
-                            );
-                        });
-    
-                        return item.Level1.length > 0;
-                    }
-                    return false;
-                });
-
-                setActions(allActions)
-
-            } catch (error) {
-                console.error("Error obteniendo los datos del negocio:", error);
-            }
-        };
-
-        fetchActionsData();
-    }, [token, empresaId]);
-    
-
     const imageLoaded = () => {
         setImageLoadedState(true);
     };
@@ -125,8 +71,6 @@ export const Home = () => {
             setJWT(null)
             setSecUserId(null)
         },[setJWT,setSecUserId])
-    
-        const dynamicStyle = actions.length > 0 ? { display: 'block' } : { display: 'flex' };
     return (
         <>
             <div id='AppPopupStyles'>
@@ -146,20 +90,15 @@ export const Home = () => {
                         }
                         <button className="closeSesionClass" onClick={logout}>Cerrar Sesión</button>
                     </div>
-                    <div className="content" id="dynamicContent" style={dynamicStyle}>
+                    <div className="content" id="dynamicContent" style={{ display: hasActions || hasReminders ? "block" : "flex" }}>
                         {
-                            actions.length>0 ? (
+                            token && empresaId && userId ? 
+                            (
                                 <>
-                                    <h3 style={{width:'100%', textAlign:'center', paddingBottom:10 }}>Ahora Mismo</h3>
-                                    {
-                                    actions.map((action, index)=> (
-                                        <CardOnLive action={action} key={index}/>
-                                    ))
-                                    }
+                                    <ActionsCard token={token} empresaId={empresaId} onActionsUpdate={setHasActions}/>
+                                    <RemindersCard token={token} empresaId={empresaId} secUserId={userId} onRemindersUpdate={setHasReminders} />
                                 </>
-                            ):(
-                                <div className="loader"></div>
-                            )
+                            ):('')
                         }
                     </div>
                 </div>
