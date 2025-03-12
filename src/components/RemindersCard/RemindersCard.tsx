@@ -3,7 +3,7 @@ import './RemindersCard.css'
 import getReminders from '../../services/getReminders';
 import CardOnReminder from '../CardOnReminder/CardOnReminder';
 
-export const RemindersCard = ({ token, empresaId, secUserId, onRemindersUpdate }: { token: string, empresaId: string, secUserId:string, onRemindersUpdate: (hasActions: boolean) => void }) => {
+export const RemindersCard = ({ token, empresaId, secUserId }: { token: string, empresaId: string, secUserId:string}) => {
     const [reminders, setReminders] = useState<any[]|null>(null);
 
     useEffect(() => {
@@ -18,7 +18,6 @@ export const RemindersCard = ({ token, empresaId, secUserId, onRemindersUpdate }
                 })
 
                 setReminders(allReminders);
-                onRemindersUpdate(allReminders.length > 0);
             }catch(err){
                 console.error(err)
             }

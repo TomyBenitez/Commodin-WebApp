@@ -1,8 +1,7 @@
-/* Estilos para el recuadro de datos */
 .data-box-live{
     display: flex;
     align-items: center;
-    background: white;
+    background: var(--blanco);
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 10px;
@@ -16,7 +15,7 @@
 
 .data-box-live:hover{
     transform: translateY(-2px);
-    background: #f8f8f8;
+    background: var(--gris-claro);
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -59,12 +58,18 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 3em; /* Ajusta según el tamaño de fuente */
+    max-height: 2em; /* Ajusta según el tamaño de fuente */
     white-space: normal;
+    margin-bottom: 5px;
+    color: var(--gris-oscuro);
 }
 
 .data-content-live p {
-    margin: 5px 0;
-    font-size: 10px;
-    color: #555;
+    margin: 1px 0;
+    font-size: 12px;
+    color: var(--gris);
+}
+
+.data-content-live strong {
+    color: var(--gris-oscuro);
 }

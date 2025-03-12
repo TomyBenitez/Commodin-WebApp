@@ -1,10 +1,16 @@
-.title-action{
-    width:100%;
-    text-align:center;
-    padding-bottom:5px;
-    padding-top: 5px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius:5px;
+.title-action {
+    width: 100%;
+    text-align: center;
+    padding: 8px 15px;
+    margin: 10px 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    border: var(--blancoe0) 1px solid;
+    border-radius: 20px;
+    background: linear-gradient(145deg, var(--blancof7), var(--blancoe0));
+    font-family: 'Helvetica', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gris33);
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
 }

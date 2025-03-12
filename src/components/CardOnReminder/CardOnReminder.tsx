@@ -11,7 +11,7 @@ function formatFecha(fechaOriginal: any) {
         return 'Fecha inválida';
     }
 
-    fecha.setHours(fecha.getHours() -2 );
+    fecha.setHours(fecha.getHours() - 1 );
 
     return new Intl.DateTimeFormat("es-AR", {
         year: "numeric",

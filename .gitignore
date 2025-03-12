@@ -27,3 +27,14 @@ dist-ssr
 *.json
 *.env
 *.png
+*.apk
+*.keystore
+*.bat
+*.txt
+*.gradle
+*.idsig
+*.aab
+app/*
+gradle/*
+gradlew
+gradle.properties

@@ -29,7 +29,10 @@ function formatFecha(fechaOriginal: any) {
 
 async function handleWindow(ActId:string, ActTipoActividad:number){
     const url = await EncryptedUrl(ActId, ActTipoActividad.toString())
-    window.open(`${url}`)
+    console.log(url)
+    url ? 
+        window.open(`${url}`, '_blank'):
+    ''
 }
 
 function CardOnLive({action}:{action:any}) {

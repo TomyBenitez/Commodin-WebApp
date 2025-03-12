@@ -1,5 +1,5 @@
 .data-box-reminder {
-    background: #ffffff;
+    background: var(--blanco);
     border-left: 5px solid #007bff;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -27,16 +27,23 @@
 }
 
 .data-content-reminder h3 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limita a 2 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 2em; /* Ajusta según el tamaño de fuente */
+    white-space: normal;
+    margin-bottom: 5px;
+    color: var(--gris-oscuro);
 }
 
 .data-content-reminder p {
-    font-size: 14px;
-    color: #555;
+    margin: 1px 0;
+    font-size: 12px;
+    color: var(--gris);
 }
 
 .data-content-reminder strong {
-    color: #222;
+    color: var(--gris-oscuro);
 }

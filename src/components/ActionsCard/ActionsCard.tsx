@@ -4,7 +4,7 @@ import CardOnLive from "../CardOnLive/CardOnLive";
 import './ActionsCard.css'
 
 
-export const ActionsCard = ({ token, empresaId, onActionsUpdate }: { token: string, empresaId: string, onActionsUpdate: (hasActions: boolean) => void }) => {
+export const ActionsCard = ({ token, empresaId }: { token: string, empresaId: string }) => {
     const [actions, setActions] = useState<any[]|null>(null);
     useEffect(() => {
         if (!token || !empresaId) return; // No ejecutar si faltan valores
@@ -51,7 +51,6 @@ export const ActionsCard = ({ token, empresaId, onActionsUpdate }: { token: stri
                 });
     
                 setActions(allActions)
-                onActionsUpdate(allActions.length > 0);
 
             } catch (error) {
                 console.error("Error obteniendo los datos del negocio:", error);

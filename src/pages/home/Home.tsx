@@ -11,9 +11,8 @@ export const Home = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [empresaId, setEmpresaId] = useState<string | null>(null);
     const [logoUrl, setLogoUrl] = useState<string | null>(null);
+    const [comunidadTemplatesFondo, setComunidadTemplatesFondo] = useState<string | null>(null);
     const [imageLoadedState, setImageLoadedState] = useState(false);
-    const [hasActions, setHasActions] = useState(false);
-    const [hasReminders, setHasReminders] = useState(false);
     const context = useContext(Context);
 
     if (!context) {
@@ -50,6 +49,7 @@ export const Home = () => {
                     await cookieService.setCookie('empresaLogo',lastBusiness.EmpresaLogo)
                     setEmpresaId(lastBusiness.EmpresaId)
                     setLogoUrl(lastBusiness.EmpresaLogo)
+                    setComunidadTemplatesFondo(lastBusiness.ComunidadTemplatesFondo_S3URL)
                 }
             } catch (error) {
                 console.error("Error obteniendo los datos del negocio:", error);
@@ -59,9 +59,69 @@ export const Home = () => {
         fetchBusinessData();
     }, [token, userId]);
 
+    useEffect(() => {
+        if (comunidadTemplatesFondo && comunidadTemplatesFondo !== 'parms_error') {
+            updateStyles(comunidadTemplatesFondo);
+        }
+    }, [logoUrl]);
+
     const imageLoaded = () => {
         setImageLoadedState(true);
     };
+
+    const updateStyles = (logo: string) => {
+        document.body.style.backgroundImage = `url(${logo})`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundSize = "100% 100%";
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.height = '100vh'
+        document.body.style.width = '100vw'
+    };
+
+    /* const updateColor = (color:string) => {
+        const header = document.querySelector(".header") as HTMLElement;
+    
+        if (!header) return;
+
+        switch(color.toLowerCase()){
+            case 'theme-blue':
+                header.style.backgroundColor = '#000000'
+                break;
+            case 'theme-indigo':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-rose':
+                header.style.backgroundColor = '#5e9ea0'
+                break;
+            case 'theme-purple':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-amber':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-slate':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-green':
+                header.style.backgroundColor = '#808080'
+                break;
+            case 'theme-orange':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-zinc':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-lime':
+                header.style.backgroundColor = 'red'
+                break;
+            case 'theme-fuchsia':
+                header.style.backgroundColor = 'red'
+                break;
+            default:
+                header.style.backgroundColor = '#3e3f43'
+                break;
+        }
+    } */
 
     const { setJWT, setSecUserId } = context;
         const logout = useCallback(()=>{
@@ -92,11 +152,11 @@ export const Home = () => {
                     </div>
                     <div className="content" id="dynamicContent">
                         {
-                            token && empresaId && userId ? 
+                            token && empresaId && userId? 
                             (
                                 <>
-                                    <ActionsCard token={token} empresaId={empresaId} onActionsUpdate={setHasActions}/>
-                                    <RemindersCard token={token} empresaId={empresaId} secUserId={userId} onRemindersUpdate={setHasReminders} />
+                                    <ActionsCard token={token} empresaId={empresaId}/>
+                                    <RemindersCard token={token} empresaId={empresaId} secUserId={userId}/>
                                 </>
                             ):null
                         }
