@@ -18,7 +18,12 @@ export const getLastBusiness = ({SecUserId, Token}:UserData) => {
         cache:'no-store'
     }
   ).then(res =>{
-    if(!res.ok) throw new Error('Response is NOT ok')
+    if (!res.ok) {
+      // Lanza un error con el código de estado para que puedas capturarlo en el catch
+      const error = new Error('Response is NOT ok');
+      (error as any).status = res.status;
+      throw error;
+    }
     return res.json()
   })
 )}

@@ -51,6 +51,7 @@ export const ActionsCard = ({ token, empresaId }: { token: string, empresaId: st
                 });
     
                 setActions(allActions)
+                console.log(allActions)
 
             } catch (error) {
                 console.error("Error obteniendo los datos del negocio:", error);
