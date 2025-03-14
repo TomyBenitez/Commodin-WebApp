@@ -58,7 +58,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 2em; /* Ajusta según el tamaño de fuente */
+    max-height: 3em; /* Ajusta según el tamaño de fuente */
     white-space: normal;
     margin-bottom: 5px;
     color: var(--gris-oscuro);
