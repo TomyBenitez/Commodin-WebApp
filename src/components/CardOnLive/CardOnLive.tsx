@@ -49,7 +49,7 @@ function CardOnLive({action}:{action:any}) {
             onClick={() => handleWindow(action?.ActId, action?.ActTipoActividad)}
             data-actid={action?.ActId || 0}
             data-typeact={action?.ActTipoActividad}>
-            <img src={action.ActRAM}
+            <img src={action.ActRAM ? action.ActRAM : `${import.meta.env.VITE_BASE_COMMODIN}/uploads/2023/10/12-48x48.png`}
             onLoad={imageLoaded}
             alt={action.ActPrgTitle}
             className={`${imageLoadedState ? 'loaded' : ''}`}/>
